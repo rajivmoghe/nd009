@@ -1,0 +1,262 @@
+Quiz: Build A Perceptron
+Here is relevant forum post for this quiz (https://discussions.udacity.com/t/build-a-perceptron-quiz/184008).
+
+Note that here, and the rest of the mini-project, that signal strength equal to the threshold results in a 0 being output (rather than 1).
+
+It is required that the dot product be strictly greater than the threshold, rather than greater than or equal to the threshold, to pass the assertion tests.
+
+====
+# ----------
+# 
+# In this exercise, you will add in code that decides whether a perceptron will fire based
+# on the threshold. Your code will go in lines 32 and 34. 
+#
+# ----------
+import numpy as np
+
+class Perceptron:
+    """
+    This class models an artificial neuron with step activation function.
+    """
+    def __init__(self, weights = np.array([1]), threshold = 0):
+        """
+        Initialize weights and threshold based on input arguments. Note that no
+        type-checking is being performed here for simplicity.
+        """
+        self.weights = weights
+        self.threshold = threshold
+    
+    def activate(self,inputs):
+        """
+        Takes in @param inputs, a list of numbers equal to length of weights.
+        @return the output of a threshold perceptron with given inputs based on
+        perceptron weights and threshold.
+        """ 
+
+        # The strength with which the perceptron fires.
+        strength = np.dot(self.weights, inputs)
+        # TODO: return 0 or 1 based on the threshold
+        if strength <= self.threshold :
+            self.result = 0
+        else:
+            self.result = 1    
+        return self.result
+
+
+def test():
+    """
+    A few tests to make sure that the perceptron class performs as expected.
+    Nothing should show up in the output if all the assertions pass.
+    """
+    p1 = Perceptron(np.array([1, 2]), 0.)
+    assert p1.activate(np.array([ 1,-1])) == 0 # < threshold --> 0
+    assert p1.activate(np.array([-1, 1])) == 1 # > threshold --> 1
+    assert p1.activate(np.array([ 2,-1])) == 0 # on threshold --> 0
+
+if __name__ == "__main__":
+    test()
+====
+***********
+
+Quiz: Threshold Meditation
+The main advantage of having a threshold be set to a perceptron is being able control when a perceptron should fire and when it shouldn't. This gives us control on the sensitivity of our neurons thereby helping us influence the desired output.
+
+Adfvantage of a perceptron:
+A perceptron used for classification will benifit from a threshold, while the simple dot product is used for continuous variables.
+
+***********
+
+Quiz: Perceptron Update Rule
+This is relevant forum post for this quiz.(https://discussions.udacity.com/t/perceptron-update/184989)
+
+====
+# ----------
+#
+# In this exercise, you will update the perceptron class so that it can update
+# its weights.
+#
+# Finish writing the update() method so that it updates the weights according
+# to the perceptron update rule. Updates should be performed online, revising
+# the weights after each data point.
+#
+# YOUR CODE WILL GO IN LINES 51 AND 59.
+# ----------
+
+import numpy as np
+
+class Perceptron:
+    """
+    This class models an artificial neuron with step activation function.
+    """
+    def __init__(self, weights = np.array([1]), threshold = 0):
+        """
+        Initialize weights and threshold based on input arguments. Note that no
+        type-checking is being performed here for simplicity.
+        """
+        self.weights = weights.astype(float) 
+        self.threshold = threshold
+
+    def activate(self, values):
+        """
+        Takes in @param values, a list of numbers equal to length of weights.
+        @return the output of a threshold perceptron with given inputs based on
+        perceptron weights and threshold.
+        """
+        # First calculate the strength with which the perceptron fires
+        strength = np.dot(values,self.weights)
+        # Then return 0 or 1 depending on strength compared to threshold  
+        print "Activate function values:", values, "strength", strength
+        return int(strength > self.threshold)
+
+    def update(self, values, train, eta=.1):
+        print "Updating perceptron", self.weights, "with", values, "train =", train
+        """
+        Takes in a 2D array @param values consisting of a LIST of inputs and a
+        1D array @param train, consisting of a corresponding list of expected
+        outputs. Updates internal weights according to the perceptron training
+        rule using these values and an optional learning rate, @param eta.
+        """
+
+        # For each data point:
+        for data_point in xrange(len(values)):
+            # TODO: Obtain the neuron's prediction for the data_point --> values[data_point]
+            prediction = self.activate(values[data_point])
+            # Get the prediction accuracy calculated as (expected value - predicted value)
+            # expected value = train[data_point], predicted value = prediction
+            error = train[data_point] - prediction
+            # TODO: update self.weights based on the multiplication of:
+            # - prediction accuracy(error)
+            # - learning rate(eta)
+            # - input value(values[data_point])
+            weight_update = values[data_point] * error * eta
+            self.weights += weight_update
+
+def test():
+    """
+    A few tests to make sure that the perceptron class performs as expected.
+    Nothing should show up in the output if all the assertions pass.
+    """
+    def sum_almost_equal(array1, array2, tol = 1e-6):
+        return sum(abs(array1 - array2)) < tol
+
+    p1 = Perceptron(np.array([1,1,1]),0)
+    p1.update(np.array([[2,0,-3]]), np.array([1]))
+    assert sum_almost_equal(p1.weights, np.array([1.2, 1, 0.7]))
+
+    p2 = Perceptron(np.array([1,2,3]),0)
+    p2.update(np.array([[3,2,1],[4,0,-1]]),np.array([0,0]))
+    assert sum_almost_equal(p2.weights, np.array([0.7, 1.8, 2.9]))
+
+    p3 = Perceptron(np.array([3,0,2]),0)
+    p3.update(np.array([[2,-2,4],[-1,-3,2],[0,2,1]]),np.array([0,1,0]))
+    assert sum_almost_equal(p3.weights, np.array([2.7, -0.3, 1.7]))
+
+if __name__ == "__main__":
+    test()
+
+====
+
+
+
+
+def NextWordProbability(sampletext,word):
+    
+    toreturn = {}
+    
+    wordlist = sampletext.split()
+    
+    for index, someword in enumerate(wordlist):
+        if someword == word:
+#            print "found", word, wordlist[index + 1]
+            nextword = wordlist[index + 1]
+            if nextword in toreturn.keys():
+                toreturn[nextword] += 1
+            else:
+                toreturn[nextword] = 1
+        else:
+            pass
+        
+#    print word,"::", toreturn, "\n######"
+    
+    return  toreturn
+    
+****************************************************
+
+#------------------------------------------------------------------
+
+#
+#   Bayes Optimal Classifier
+#
+#   In this quiz we will compute the optimal label for a second missing word in a row
+#   based on the possible words that could be in the first blank
+#
+#   Finish the procedurce, LaterWords(), below
+#
+#   You may want to import your code from the previous programming exercise!
+#
+
+sample_memo = '''
+Milt, we're gonna need to go ahead and move you downstairs into storage B. We have some new people coming in, and we need all the space we can get. So if you could just go ahead and pack up your stuff and move it down there, that would be terrific, OK?
+Oh, and remember: next Friday... is Hawaiian shirt day. So, you know, if you want to, go ahead and wear a Hawaiian shirt and jeans.
+Oh, oh, and I almost forgot. Ahh, I'm also gonna need you to go ahead and come in on Sunday, too...
+Hello Peter, whats happening? Ummm, I'm gonna need you to go ahead and come in tomorrow. So if you could be here around 9 that would be great, mmmk... oh oh! and I almost forgot ahh, I'm also gonna need you to go ahead and come in on Sunday too, kay. We ahh lost some people this week and ah, we sorta need to play catch up.
+'''
+
+corrupted_memo = '''
+Yeah, I'm gonna --- you to go ahead --- --- complain about this. Oh, and if you could --- --- and sit at the kids' table, that'd be --- 
+'''
+
+data_list = sample_memo.strip().split()
+
+words_to_guess = ["ahead","could"]
+
+def NextWordProbability(sampletext,word):
+    toreturn = {}
+    wordlist = sampletext.split()
+    for index, someword in enumerate(wordlist):
+        if someword == word:
+            nextword = wordlist[index + 1]
+            if nextword in toreturn.keys():
+                toreturn[nextword] += 1
+            else:
+                toreturn[nextword] = 1
+    return  toreturn
+
+
+def LaterWords(sample,word,distance):
+    '''@param sample: a sample of text to draw from
+    @param word: a word occuring before a corrupted sequence
+    @param distance: how many words later to estimate (i.e. 1 for the next word, 2 for the word after that)
+    @returns: a single word which is the most likely possibility
+    '''
+    
+    # TODO: Given a word, collect the relative probabilities of possible following words
+    # from @sample. You may want to import your code from the maximum likelihood exercise.
+    
+    dict1 = NextWordProbability(sample, word)
+    
+    print "dict1 >>", word, "  ::  ", dict1
+    
+    # TODO: Repeat the above process--for each distance beyond 1, evaluate the words that
+    # might come after each word, and combine them weighting by relative probability
+    # into an estimate of what might appear next.
+    
+    dict2={}
+    for nextword in dict1:
+        dict2.update(NextWordProbability(sample, nextword))
+        
+    print "dict2 >>", word, " :: ", dict2
+    
+    maxval = 0
+    retword = ""
+    for akey in dict2:
+        if dict2[akey] > maxval:
+            maxval = dict2[akey]
+            retword = akey
+            
+    return retword
+    
+print LaterWords(sample_memo,"ahead",2)
+
+
+*******************************
