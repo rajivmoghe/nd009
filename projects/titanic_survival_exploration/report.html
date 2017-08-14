@@ -11806,10 +11806,10 @@ div#notebook {
 
 
 
-<div id="d49fed91-ace0-43ed-bed7-247c414f379e"></div>
+<div id="c7300e5e-2312-4248-8370-28120ba061b9"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#d49fed91-ace0-43ed-bed7-247c414f379e');
+var element = $('#c7300e5e-2312-4248-8370-28120ba061b9');
 IPython.notebook.set_autosave_interval(0)
 </script>
 </div>
@@ -13136,7 +13136,7 @@ Fill in the missing code below so that the function will make this prediction.<b
         <span class="c1"># pass</span>
         <span class="k">if</span> <span class="n">passenger</span><span class="p">[</span><span class="s1">&#39;Sex&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;female&quot;</span><span class="p">:</span>
             <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">passenger</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">passenger</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
             <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -13185,7 +13185,7 @@ Fill in the missing code below so that the function will make this prediction.<b
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predictions have an accuracy of 79.24%.
+<pre>Predictions have an accuracy of 79.35%.
 </pre>
 </div>
 </div>
@@ -13198,7 +13198,7 @@ Fill in the missing code below so that the function will make this prediction.<b
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer</strong>: Predictions have an accuracy of 79.24%.</p>
+<p><strong>Answer</strong>: Predictions have an accuracy of 79.35%.</p>
 
 </div>
 </div>
@@ -13605,6 +13605,14 @@ Make sure to keep track of the various features and conditions you tried before 
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer</strong>: Predictions have an accuracy of 80.36%.</p>
 <p>The accuracy does not change for s single line (indiscriminately kill all males) vs the more complex nested if's.</p>
+<p><strong>What features did you look at?</strong></p>
+<p>As is commented out in the code above, I looked at Age, Pclass, SibSp and Parch features.</p>
+<p><strong>Were certain features more informative than others</strong></p>
+<p>Yes, the Sex and Pclass were more clear in terms of giving reasonably good splits. Specifically Age &gt; 70, and Pclass == 3 had a good split in terms of survived/not-survived.
+The SibSp was a good differentiator for females in Pclass == 3, but for the males, it did not contribute to overall accuracy because of really small numbers ( &lt; 20 ) impacted.
+The Parch did not provide significant differentiation on survival status.</p>
+<p><strong>Which conditions did you use to split the survival outcomes in the data</strong></p>
+<p>Primarily Age ( &lt; 10, &gt; 70), Sex (m vs f) Pclass (1 &amp; 2 vs 3)</p>
 
 </div>
 </div>
