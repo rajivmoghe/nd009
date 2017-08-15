@@ -63,3 +63,9 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+#backup answers
+projects/l8answers.txt
+
+#Reading resources
+resources/
