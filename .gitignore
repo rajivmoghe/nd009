@@ -69,3 +69,7 @@ projects/l8answers.txt
 
 #Reading resources
 resources/
+
+#Local files
+.vscode/
+
