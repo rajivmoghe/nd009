@@ -49,12 +49,12 @@ class LearningAgent(Agent):
             self.alpha = 0
             self.epsilon= 0
         else:
+            self.t += 1 # moving this to before next epsilon calculation, otherwise 1/t^2 gives a divide by zero. 
             #self.epsilon = self.epsilon - 0.005 # Initial linear learner
             #self.epsilon = self.a ** self.t
-            self.epsilon = 1.0 /(self.t+1)**2
+            self.epsilon = 1.0 /(self.t)**2 
             #self.epsilon = math.exp(-self.a*self.t)
             #self.epsilon = math.cos(self.a*self.t)
-            self.t += 1
 
         self.testing = testing
         return None
@@ -93,11 +93,8 @@ class LearningAgent(Agent):
         ###########
         # Calculate the maximum Q-value of all actions for a given state
 
-        maxQ = -2**10
-        for actn in self.Q[state]:
-            if self.Q[state][actn] > maxQ:
-                maxQ = self.Q[state][actn]
-                
+        maxQ = max(self.Q[state].values()) # much elegant than previous approach. Thanks for the review comment.
+    
         return maxQ 
 
 
